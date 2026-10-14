@@ -12,18 +12,23 @@ verde(){ printf '\033[32m%s\033[0m\n' "$*"; }
 vermelho(){ printf '\033[31m%s\033[0m\n' "$*"; }
 amarelo(){ printf '\033[33m%s\033[0m\n' "$*"; }
 
-# pasta do dia mais recente, ou a que você passar
+# pasta do dia mais recente que tenha codigo, ou a que voce passar
 alvo(){
   if [ $# -gt 0 ] && [ -n "${1:-}" ]; then
     echo "$DIAS/$1"
-  else
-    ls -d "$DIAS"/dia* 2>/dev/null | sort | tail -1
+    return
   fi
+  # ignora pasta vazia: so vale a que tem .java dentro
+  local d
+  for d in $(ls -d "$DIAS"/dia* 2>/dev/null | sort -r); do
+    if ls "$d"/*.java >/dev/null 2>&1; then echo "$d"; return; fi
+  done
+  ls -d "$DIAS"/dia* 2>/dev/null | sort | tail -1
 }
 
 case "${1:-ajuda}" in
 
-  novo)
+  novo|criar|new)
     n="${2:-}"
     if [ -z "$n" ]; then
       ultimo=$(ls -d "$DIAS"/dia* 2>/dev/null | sort | tail -1)
@@ -44,7 +49,7 @@ JAVA
     echo "agora:  ./jt run"
     ;;
 
-  run|r)
+  run|r|rodar)
     d=$(alvo "${2:-}")
     [ -d "$d" ] || { vermelho "nao achei a pasta do dia"; exit 1; }
     mkdir -p "$BUILD"
@@ -61,29 +66,33 @@ JAVA
     fi
     ;;
 
-  sh|jshell)
+  sh|jshell|lab)
     amarelo "jshell — laboratorio. /exit pra sair, /help pra ajuda."
     jshell
     ;;
 
-  test|t)
+  test|t|teste|testar)
     d=$(alvo "${2:-}")
     esperado="$d/esperado.txt"
     [ -f "$esperado" ] || { amarelo "sem esperado.txt em $(basename "$d") — nada a conferir"; exit 0; }
     mkdir -p "$BUILD"; rm -f "$BUILD"/*.class 2>/dev/null
     javac -d "$BUILD" "$d"/*.java 2>/tmp/jt_erro || { vermelho "nao compilou:"; cat /tmp/jt_erro; exit 1; }
     java -cp "$BUILD" Main > /tmp/jt_saida 2>&1
-    if diff -q /tmp/jt_saida "$esperado" >/dev/null; then
+    # normaliza fim de linha (java no Windows gera \r\n) e espaco no fim
+    tr -d '\r' < /tmp/jt_saida | sed -e 's/[[:space:]]*$//' > /tmp/jt_a
+    tr -d '\r' < "$esperado"   | sed -e 's/[[:space:]]*$//' > /tmp/jt_b
+    if diff -q /tmp/jt_a /tmp/jt_b >/dev/null; then
       verde "PASSOU  $(basename "$d")"
     else
       vermelho "FALHOU  $(basename "$d")"
-      echo "--- esperado ---"; cat "$esperado"
-      echo "--- recebido ---"; cat /tmp/jt_saida
+      echo "--- esperado ---"; cat /tmp/jt_b
+      echo "--- recebido ---"; cat /tmp/jt_a
+      echo "--- diferenca ---"; diff /tmp/jt_b /tmp/jt_a | head -10
       exit 1
     fi
     ;;
 
-  ok|done)
+  ok|done|feito|pronto)
     cd "$RAIZ" || exit 1
     [ -d .git ] || { git init -q && git branch -M main; }
     d=$(basename "$(alvo "")")
@@ -103,7 +112,7 @@ JAVA
     fi
     ;;
 
-  hoje)
+  hoje|dia)
     hoje=$(date +%Y-%m-%d)
     di=$(( ( $(date -d "$hoje" +%s) - $(date -d "$INICIO" +%s) ) / 86400 + 1 ))
     feitos=$(ls -d "$DIAS"/dia* 2>/dev/null | wc -l)
@@ -112,7 +121,7 @@ JAVA
     [ "$feitos" -ge "$di" ] && verde "em dia."
     ;;
 
-  streak)
+  streak|sequencia)
     cd "$RAIZ" || exit 1
     [ -d .git ] || { amarelo "sem git ainda"; exit 0; }
     echo "commits por dia (ultimos 14):"
@@ -124,10 +133,10 @@ JAVA
 jt — java training
 
   ./jt novo [diaNN]   cria a pasta do dia com Main.java
-  ./jt run            compila e roda o dia mais recente
-  ./jt sh             abre o jshell (laboratorio)
-  ./jt test           compara a saida com esperado.txt
-  ./jt ok "mensagem"  commita e manda pro GitHub
+  ./jt rodar          compila e roda  (tambem: run, r)
+  ./jt lab            abre o jshell   (tambem: sh)
+  ./jt teste          confere a saida (tambem: test, t)
+  ./jt ok "mensagem"  commita e envia  (tambem: feito, pronto)
   ./jt hoje           diz em que dia do plano voce esta
   ./jt streak         commits por dia nas ultimas 2 semanas
 
