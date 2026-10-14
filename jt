@@ -95,13 +95,24 @@ JAVA
   ok|done|feito|pronto)
     cd "$RAIZ" || exit 1
     [ -d .git ] || { git init -q && git branch -M main; }
+    # sem identidade o git recusa o commit — avisa em vez de falhar calado
+    if ! git config user.email >/dev/null 2>&1; then
+      vermelho "o git nao sabe quem voce e. rode uma vez:"
+      echo "  git config --global user.name \"Seu Nome\""
+      echo "  git config --global user.email \"seu@email.com\""
+      exit 1
+    fi
     d=$(basename "$(alvo "")")
     git add -A
     if git diff --cached --quiet; then
       amarelo "nada novo pra commitar"
     else
-      git commit -q -m "${2:-$d concluido}"
-      verde "commit feito: ${2:-$d concluido}"
+      if git commit -q -m "${2:-$d concluido}"; then
+        verde "commit feito: ${2:-$d concluido}"
+      else
+        vermelho "o commit FALHOU — leia a mensagem acima"
+        exit 1
+      fi
     fi
     if git remote get-url origin >/dev/null 2>&1; then
       git push -q origin main && verde "enviado pro GitHub" || vermelho "push falhou — confere o remote"
