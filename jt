@@ -1,0 +1,138 @@
+#!/usr/bin/env bash
+# jt — java training. Seu painel de controle pelo terminal.
+# Uso:  ./jt <comando> [argumento]
+set -u
+
+RAIZ="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DIAS="$RAIZ/dias"
+BUILD="$RAIZ/.build"
+INICIO="2026-10-14"
+
+verde(){ printf '\033[32m%s\033[0m\n' "$*"; }
+vermelho(){ printf '\033[31m%s\033[0m\n' "$*"; }
+amarelo(){ printf '\033[33m%s\033[0m\n' "$*"; }
+
+# pasta do dia mais recente, ou a que você passar
+alvo(){
+  if [ $# -gt 0 ] && [ -n "${1:-}" ]; then
+    echo "$DIAS/$1"
+  else
+    ls -d "$DIAS"/dia* 2>/dev/null | sort | tail -1
+  fi
+}
+
+case "${1:-ajuda}" in
+
+  novo)
+    n="${2:-}"
+    if [ -z "$n" ]; then
+      ultimo=$(ls -d "$DIAS"/dia* 2>/dev/null | sort | tail -1)
+      num=$(( $(basename "${ultimo:-dia00}" | tr -dc '0-9') + 1 ))
+      n=$(printf "dia%02d" "$num")
+    fi
+    mkdir -p "$DIAS/$n"
+    if [ ! -f "$DIAS/$n/Main.java" ]; then
+      cat > "$DIAS/$n/Main.java" <<'JAVA'
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("comeca aqui");
+    }
+}
+JAVA
+    fi
+    verde "criado: dias/$n/Main.java"
+    echo "agora:  ./jt run"
+    ;;
+
+  run|r)
+    d=$(alvo "${2:-}")
+    [ -d "$d" ] || { vermelho "nao achei a pasta do dia"; exit 1; }
+    mkdir -p "$BUILD"
+    rm -f "$BUILD"/*.class 2>/dev/null
+    if javac -d "$BUILD" "$d"/*.java 2>/tmp/jt_erro; then
+      echo "--- saida ---"
+      java -cp "$BUILD" Main
+      echo "-------------"
+      verde "compilou e rodou: $(basename "$d")"
+    else
+      vermelho "nao compilou:"
+      cat /tmp/jt_erro
+      exit 1
+    fi
+    ;;
+
+  sh|jshell)
+    amarelo "jshell — laboratorio. /exit pra sair, /help pra ajuda."
+    jshell
+    ;;
+
+  test|t)
+    d=$(alvo "${2:-}")
+    esperado="$d/esperado.txt"
+    [ -f "$esperado" ] || { amarelo "sem esperado.txt em $(basename "$d") — nada a conferir"; exit 0; }
+    mkdir -p "$BUILD"; rm -f "$BUILD"/*.class 2>/dev/null
+    javac -d "$BUILD" "$d"/*.java 2>/tmp/jt_erro || { vermelho "nao compilou:"; cat /tmp/jt_erro; exit 1; }
+    java -cp "$BUILD" Main > /tmp/jt_saida 2>&1
+    if diff -q /tmp/jt_saida "$esperado" >/dev/null; then
+      verde "PASSOU  $(basename "$d")"
+    else
+      vermelho "FALHOU  $(basename "$d")"
+      echo "--- esperado ---"; cat "$esperado"
+      echo "--- recebido ---"; cat /tmp/jt_saida
+      exit 1
+    fi
+    ;;
+
+  ok|done)
+    cd "$RAIZ" || exit 1
+    [ -d .git ] || { git init -q && git branch -M main; }
+    d=$(basename "$(alvo "")")
+    git add -A
+    if git diff --cached --quiet; then
+      amarelo "nada novo pra commitar"
+    else
+      git commit -q -m "${2:-$d concluido}"
+      verde "commit feito: ${2:-$d concluido}"
+    fi
+    if git remote get-url origin >/dev/null 2>&1; then
+      git push -q origin main && verde "enviado pro GitHub" || vermelho "push falhou — confere o remote"
+    else
+      amarelo "sem remote. pra ligar no GitHub:"
+      echo "  git remote add origin https://github.com/SEU-USUARIO/java-junior.git"
+      echo "  git push -u origin main"
+    fi
+    ;;
+
+  hoje)
+    hoje=$(date +%Y-%m-%d)
+    di=$(( ( $(date -d "$hoje" +%s) - $(date -d "$INICIO" +%s) ) / 86400 + 1 ))
+    feitos=$(ls -d "$DIAS"/dia* 2>/dev/null | wc -l)
+    echo "dia do plano: $di   ·   pastas criadas: $feitos"
+    [ "$feitos" -lt "$di" ] && amarelo "voce esta $(( di - feitos )) dia(s) atras. nao tenta recuperar tudo: faz o de hoje."
+    [ "$feitos" -ge "$di" ] && verde "em dia."
+    ;;
+
+  streak)
+    cd "$RAIZ" || exit 1
+    [ -d .git ] || { amarelo "sem git ainda"; exit 0; }
+    echo "commits por dia (ultimos 14):"
+    git log --since="14 days ago" --date=short --pretty=format:%ad 2>/dev/null | sort | uniq -c | awk '{printf "  %s  %s\n", $2, $1}'
+    ;;
+
+  *)
+    cat <<'AJUDA'
+jt — java training
+
+  ./jt novo [diaNN]   cria a pasta do dia com Main.java
+  ./jt run            compila e roda o dia mais recente
+  ./jt sh             abre o jshell (laboratorio)
+  ./jt test           compara a saida com esperado.txt
+  ./jt ok "mensagem"  commita e manda pro GitHub
+  ./jt hoje           diz em que dia do plano voce esta
+  ./jt streak         commits por dia nas ultimas 2 semanas
+
+atalho: coloque no seu ~/.bashrc
+  alias jt='~/java-junior/jt'
+AJUDA
+    ;;
+esac
