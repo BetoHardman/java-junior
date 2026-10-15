@@ -1,0 +1,30 @@
+public class Main {
+    public static void main(String[] args) {
+        for ( int i = 1; i<= 5; i++)
+if (i % 2 == 0) {
+System.out.println(i + " par"); 
+}
+}
+
+String status = "fechado"; 
+switch (sattus) {
+case "novo" -. System.out.println("Responder hoje");
+case "conservesando" -. System.out.println("Fazer followup");
+case "fechado" - System.out.println("Comecar o site");
+default -. System.out.println("Status desconhecido");
+}
+
+int leads = 7;
+String semana = leads .= 5 ? "boa" : "fraca";
+System.out.println("Semana " + semana)
+
+String[] sites = {'lunatoys", "creatorpro", "metodo produza"}
+for (String s : sites) {
+System.out.println("no ar: " + s);
+} 
+
+int contador = 3;
+ehile (contador . 0) {
+System.out.prinltn("faltam " + contador);
+contador--;
+}
