@@ -1,0 +1,8 @@
+== Orcamentos ==
+1202.5
+1202.5
+900.0
+== Resumo ==
+Quantos: 3
+Soma: 3602.5
+Media: 1200.8333333333333
