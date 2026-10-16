@@ -8,6 +8,25 @@ DIAS="$RAIZ/dias"
 BUILD="$RAIZ/.build"
 INICIO="2026-10-14"
 
+LOG="$RAIZ/.jt-log/sessao.log"
+
+# grava tudo que o jt faz, pra dar pra conferir depois.
+# jshell fica de fora porque e interativo.
+case "${1:-}" in
+  sh|jshell|lab|log|ajuda|"") ;;
+  *)
+    if [ -z "${JT_LOG_ATIVO:-}" ]; then
+      export JT_LOG_ATIVO=1
+      mkdir -p "$(dirname "$LOG")"
+      {
+        printf '\n===== %s · jt %s =====\n' "$(date '+%d/%m %H:%M')" "$*"
+        "$0" "$@" 2>&1
+      } | tee -a "$LOG"
+      exit "${PIPESTATUS[0]}"
+    fi
+    ;;
+esac
+
 verde(){ printf '\033[32m%s\033[0m\n' "$*"; }
 vermelho(){ printf '\033[31m%s\033[0m\n' "$*"; }
 amarelo(){ printf '\033[33m%s\033[0m\n' "$*"; }
@@ -132,6 +151,13 @@ JAVA
     [ "$feitos" -ge "$di" ] && verde "em dia."
     ;;
 
+  log|diario)
+    if [ ! -f "$LOG" ]; then amarelo "nada gravado ainda"; exit 0; fi
+    n="${2:-60}"
+    echo "--- ultimas $n linhas de $LOG ---"
+    tail -n "$n" "$LOG"
+    ;;
+
   streak|sequencia)
     cd "$RAIZ" || exit 1
     [ -d .git ] || { amarelo "sem git ainda"; exit 0; }
@@ -149,6 +175,7 @@ jt — java training
   ./jt teste          confere a saida (tambem: test, t)
   ./jt ok "mensagem"  commita e envia  (tambem: feito, pronto)
   ./jt hoje           diz em que dia do plano voce esta
+  ./jt log [n]        mostra o que foi gravado (padrao 60 linhas)
   ./jt streak         commits por dia nas ultimas 2 semanas
 
 atalho: coloque no seu ~/.bashrc
