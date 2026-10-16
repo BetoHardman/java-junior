@@ -1,0 +1,36 @@
+DIA 5 - arquivo Cliente.java. Tudo entra DENTRO da classe Cliente.
+
+--- 1. os campos ------------------------------------------
+
+    String nome;
+    String whatsapp;
+    String status;
+
+
+--- 2. o construtor ---------------------------------------
+
+    Cliente(String nome, String whatsapp) {
+        this.nome = nome;
+        this.whatsapp = whatsapp;
+        this.status = "novo";
+    }
+
+
+--- 3. mudarStatus ----------------------------------------
+
+    void mudarStatus(String novo) {
+        this.status = novo;
+    }
+
+
+--- 4. resumo ---------------------------------------------
+
+    String resumo() {
+        return nome + " (" + whatsapp + ") - " + status;
+    }
+
+
+-----------------------------------------------------------
+O Main.java ja esta pronto, nao mexa nele.
+Terminou:  jt teste
+Passou:    jt ok "dia05 classes e objetos"

@@ -1,32 +1,37 @@
 public class Main {
-
-    // 1. metodo sem retorno (void)
+ 
     static void cabecalho(String titulo) {
-        // imprima: == titulo ==
+    System.out.println("== " + titulo + " ==");
+     
+        
     }
 
-    // 2. metodo com retorno
+    
     static double orcamento(int secoes, double valorPorSecao) {
-        // devolva secoes * valorPorSecao
-        return 0;
+        
+        return secoes * valorPorSecao;
     }
 
-    // 3. overloading: mesmo nome, um parametro so
+    
     static double orcamento(int secoes) {
-        // chame o de cima usando 240.50 como valor padrao
-        return 0;
+        return orcamento(secoes, 240.50);
+        
     }
 
-    // 4. array como parametro
+    
     static double soma(double[] valores) {
-        // some tudo com um for-each e devolva
-        return 0;
-    }
+        double t = 0;
+for (double v : valores) {
+t = t + v;
+}
+return t;
+       }
+    
 
-    // 5. um metodo chamando outro
+    
     static double media(double[] valores) {
-        // soma dividido por valores.length
-        return 0;
+        return soma(valores) / valores.length;
+        
     }
 
     public static void main(String[] args) {
