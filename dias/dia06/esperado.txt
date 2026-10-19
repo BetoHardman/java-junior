@@ -1,0 +1,10 @@
+Luna Toys (61993687124) - novo
+--- tentando mudar ---
+para fechado: true
+Luna Toys (61993687124) - fechado
+para banana: false
+Luna Toys (61993687124) - fechado
+--- lendo pelos getters ---
+Nome: Luna Toys
+Whats: 61993687124
+Status: fechado

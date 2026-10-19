@@ -1,0 +1,56 @@
+DIA 6 - Cliente.java. Tudo dentro da classe Cliente.
+
+--- 1. campos privados ------------------------------------
+
+    private String nome;
+    private String whatsapp;
+    private String status;
+
+
+--- 2. construtor -----------------------------------------
+
+    public Cliente(String nome, String whatsapp) {
+        this.nome = nome;
+        this.whatsapp = whatsapp;
+        this.status = "novo";
+    }
+
+
+--- 3. getters --------------------------------------------
+
+    public String getNome() {
+        return nome;
+    }
+
+    public String getWhatsapp() {
+        return whatsapp;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+
+--- 4. setStatus com validacao ----------------------------
+
+    public boolean setStatus(String novo) {
+        if (novo.equals("novo") || novo.equals("conversando")
+                || novo.equals("fechado") || novo.equals("perdido")) {
+            this.status = novo;
+            return true;
+        }
+        return false;
+    }
+
+
+--- 5. resumo ---------------------------------------------
+
+    public String resumo() {
+        return nome + " (" + whatsapp + ") - " + status;
+    }
+
+
+-----------------------------------------------------------
+O Main.java ja esta pronto, nao mexa nele.
+Terminou:  jt teste
+Passou:    jt ok "dia06 encapsulamento"
