@@ -1,14 +1,25 @@
 public class Cliente {
 
-    // 1. os campos: o que todo cliente tem
+String nome;
+String telefone;
+String status;    
 
 
-    // 2. o construtor: como nasce um cliente
+public Cliente (String nome, String telefone) {
+this.nome = nome;
+this.telefone = telefone;
+this.status = "novo"; 
+}    
 
 
-    // 3. metodo que muda o status
+  void mudarStatus(String novo) {
+this.status = novo;  
+ }
 
 
-    // 4. metodo que devolve o resumo em texto
 
+   String resumo() {
+return nome + " (" + telefone + ") - " + status; 
+
+ }
 }
