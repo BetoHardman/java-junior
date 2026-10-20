@@ -1,17 +1,47 @@
 public class Cliente {
 
-    // 1. os campos, agora PRIVATE
+    
+ private String nome;;
+ private String telefone; 
+ private String status;
+ 
+
+ public Cliente(String nome, String telefone) {
+ this.nome = nome;
+ this.telefone = telefone;
+ this.status = "novo";
+  }
+
+    public String getNome() {
+ return nome;
+ }
 
 
-    // 2. o construtor (igual ao dia 5, mas com public na frente)
+
+ public String getWhatsapp() {
+ return telefone;
+ }    
 
 
-    // 3. os tres getters: getNome, getWhatsapp, getStatus
+  public String getStatus() {
+ return status;
+ }
 
-
-    // 4. o setStatus que VALIDA e devolve true ou false
-
-
-    // 5. o resumo (igual ao dia 5)
-
+  public boolean setStatus(String novo) {
+if (novo.equals("novo") || novo.equals("conversando")
+     || novo.equals("fechado") || novo.equals("perdido")) {
+this.status = novo;
+ return true;  
+ }
+ return false;
 }
+
+
+
+public String resumo() {
+ return nome + " (" + telefone + ") - " + status;
+ }
+}
+
+
+
