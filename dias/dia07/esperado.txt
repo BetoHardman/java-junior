@@ -1,0 +1,7 @@
+Luna Toys (61993687124) - novo
+Bruna Severo (61999990000) - novo [VIP -20%]
+Hora A: 120.0
+Hora B: 96.0
+--- polimorfismo ---
+Luna Toys (61993687124) - novo -> 120.0
+Bruna Severo (61999990000) - novo [VIP -20%] -> 96.0

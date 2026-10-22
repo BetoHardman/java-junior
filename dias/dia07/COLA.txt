@@ -1,0 +1,35 @@
+DIA 7 - ClienteVip.java. Tudo dentro da classe ClienteVip.
+
+--- 1. o campo so do VIP ----------------------------------
+
+    private int desconto;
+
+
+--- 2. construtor -----------------------------------------
+
+    public ClienteVip(String nome, String whatsapp, int desconto) {
+        super(nome, whatsapp);
+        this.desconto = desconto;
+    }
+
+
+--- 3. valorHora sobrescrito ------------------------------
+
+    @Override
+    public double valorHora() {
+        return super.valorHora() * (100 - desconto) / 100;
+    }
+
+
+--- 4. resumo sobrescrito ---------------------------------
+
+    @Override
+    public String resumo() {
+        return super.resumo() + " [VIP -" + desconto + "%]";
+    }
+
+
+-----------------------------------------------------------
+Main.java e Cliente.java ja estao prontos, nao mexa neles.
+Terminou:  jt teste
+Passou:    jt ok "dia07 heranca e polimorfismo"
