@@ -1,0 +1,56 @@
+DIA 8 - dois arquivos novos.
+
+=== ARQUIVO 1: Repositorio.java =========================
+
+public interface Repositorio {
+    void salvar(Cliente c);
+    Cliente[] listar();
+    int total();
+}
+
+(sem corpo, sem chaves nos metodos, termina em ponto-e-virgula)
+
+
+=== ARQUIVO 2: RepositorioMemoria.java ==================
+
+public class RepositorioMemoria implements Repositorio {
+
+    private Cliente[] itens = new Cliente[10];
+    private int qtd = 0;
+
+    @Override
+    public void salvar(Cliente c) {
+        itens[qtd] = c;
+        qtd++;
+    }
+
+    @Override
+    public Cliente[] listar() {
+        Cliente[] copia = new Cliente[qtd];
+        for (int i = 0; i < qtd; i++) {
+            copia[i] = itens[i];
+        }
+        return copia;
+    }
+
+    @Override
+    public int total() {
+        return qtd;
+    }
+}
+
+----------------------------------------------------------
+ARMADILHAS DE HOJE:
+
+- o arquivo tem que se chamar igual a classe:
+  Repositorio.java  e  RepositorioMemoria.java
+- na interface NAO escreve "public" nos metodos
+- na classe os metodos PRECISAM de "public"
+  (nao da pra diminuir a visibilidade do contrato)
+- se faltar um metodo, o erro e:
+  "RepositorioMemoria is not abstract and does not override..."
+  = voce prometeu tres e entregou dois
+
+Cliente.java, ClienteVip.java e Main.java ja estao prontos. Nao mexa.
+Terminou:  jt teste
+Passou:    jt ok "dia08 interface"
