@@ -117,6 +117,91 @@ new String("oi") == new String("oi")   // false — objetos diferentes
 
 ---
 
+## 5b. Criando ou usando? (a pergunta que resolve metade dos erros)
+
+Quase todo erro meu ate aqui foi o mesmo: **copiei codigo pra um lugar onde ele
+nao tinha o que fazer.** Linha do `Main` dentro da classe, declaracao da interface
+dentro da implementacao. A causa e sempre nao ter parado pra perguntar:
+
+> **Esse nome ja existe em algum lugar, ou eu estou inventando ele agora?**
+
+- **Ja existe** -> eu **uso**: chamo com `( )`, leio, atribuo.
+- **Estou inventando** -> eu **declaro**: digo o tipo antes do nome.
+
+### A regra do que vem depois
+
+| O que aparece | Significa | Exemplo |
+|---|---|---|
+| `{ }` depois | esta **criando** | `public void salvar(Cliente c) {` |
+| `;` depois | esta so **prometendo** | `void salvar(Cliente c);` (interface) |
+| `( )` com valor dentro | esta **chamando** | `repo.salvar(c)` |
+| `new` | esta **fabricando** um objeto | `new Cliente[10]` |
+
+**`new` e a unica palavra do Java que fabrica.** Onde nao tem `new`, nada nasceu.
+
+### Lendo uma linha de verdade (dia 8)
+
+```java
+private Cliente[] itens = new Cliente[10];
+   |       |        |    |      |
+   |       |        |    |      +- FABRICANDO: cria a caixa de 10
+   |       |        |    +- atribuicao: guarda a esquerda o que vem da direita
+   |       |        +- NOME NOVO: "itens" nao existia, inventei agora
+   |       +- TIPO: "Cliente" ja existe, so aponto pra ele
+   +- quem enxerga
+```
+
+Uma linha so: **aponto** pra um tipo que existe, **invento** um nome, **fabrico** um objeto.
+
+Tres linhas abaixo, no mesmo arquivo:
+
+```java
+itens[qtd] = c;
+```
+
+Nada aqui e novo. `itens` e `qtd` eu criei acima, `c` chegou pelo parametro.
+Essa linha so **mexe** no que ja esta la.
+
+### Interface x classe — cardapio x cozinha
+
+| | O que e | Como termina o metodo | Precisa de `public`? |
+|---|---|---|---|
+| **Interface** | o cardapio: lista os pratos | `;` | nao, ja e publico |
+| **Classe** | a cozinha: cozinha cada um | `{ ... }` | **sim**, obrigatorio |
+
+Escrever o cardapio duas vezes nao abre a cozinha. Se a classe repetir as
+declaracoes da interface, o erro e:
+
+```
+attempting to assign weaker access privileges; was public
+```
+
+= prometi publico no contrato e entreguei menos aqui.
+
+### A armadilha do objeto que se cria sozinho
+
+```java
+public class RepositorioMemoria implements Repositorio {
+    Repositorio repo = new RepositorioMemoria();   // NUNCA
+}
+```
+
+Cada objeto criaria outro, que criaria outro: `StackOverflowError`.
+**Classe nenhuma se instancia dentro do proprio corpo.** Quem cria o
+repositorio e quem vai **usar** ele (o `Main`, ou o Spring).
+
+### Erros de compilador traduzidos
+
+| O compilador diz | Quer dizer |
+|---|---|
+| `cannot find symbol` | nome escrito errado, ou falta import. Compare com a linha vizinha que funciona |
+| `class, interface, enum, or record expected` | tem codigo solto fora de qualquer classe |
+| `X is not abstract and does not override Y` | assinou contrato de N metodos e entregou menos |
+| `attempting to assign weaker access privileges` | faltou `public` no metodo da classe |
+| `reached end of file while parsing` | falta uma `}` la em cima |
+
+---
+
 ## 6. Git — o mínimo que você usa todo dia
 
 ```bash
