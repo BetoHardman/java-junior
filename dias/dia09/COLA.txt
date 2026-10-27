@@ -1,0 +1,53 @@
+DIA 9 - ArrayList
+
+=== ARQUIVO 1: Repositorio.java (so EDITAR 2 linhas) =====
+
+import java.util.List;              <- linha nova, no topo do arquivo
+
+public interface Repositorio {
+    void salvar(Cliente c);
+    List<Cliente> listar();         <- era Cliente[] listar();
+    int total();
+}
+
+
+=== ARQUIVO 2: RepositorioMemoria.java (REESCREVER) ======
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class RepositorioMemoria implements Repositorio {
+
+    private List<Cliente> itens = new ArrayList<>();
+
+    @Override
+    public void salvar(Cliente c) {
+        itens.add(c);
+    }
+
+    @Override
+    public List<Cliente> listar() {
+        return itens;
+    }
+
+    @Override
+    public int total() {
+        return itens.size();
+    }
+}
+
+-----------------------------------------------------------
+ARMADILHAS DE HOJE:
+
+- import vai ANTES do "public class" / "public interface",
+  na primeira linha do arquivo
+- sao DOIS imports no RepositorioMemoria (List e ArrayList),
+  UM so no Repositorio (List)
+- "cannot find symbol: class List" = faltou o import
+- o tipo do metodo tem que bater EXATO com a interface:
+  se la diz List<Cliente>, aqui diz List<Cliente>
+- o <> vazio no "new ArrayList<>()" e proposital, nao e erro
+
+Cliente.java, ClienteVip.java e Main.java ja estao prontos. Nao mexa.
+Terminou:  jt teste
+Passou:    jt ok "dia09 ArrayList e generics"

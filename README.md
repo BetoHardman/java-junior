@@ -28,6 +28,7 @@ O IntelliJ entra depois, quando digitar deixa de ensinar e passa a atrasar.
 | 05 | Classes, objetos, construtor, `this` | [dias/dia05](dias/dia05) |
 | 06 | Encapsulamento: `private`, getters, setter com validação | [dias/dia06](dias/dia06) |
 | 07 | Herança, `super`, `@Override`, polimorfismo | [dias/dia07](dias/dia07) |
+| 08 | Interface: contrato, `implements`, programar contra o tipo | [dias/dia08](dias/dia08) |
 
 Cada pasta tem o enunciado (`EXERCICIO.md`), o código e a saída esperada
 (`esperado.txt`) usada como teste.

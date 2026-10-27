@@ -1,0 +1,14 @@
+total: 12
+--- carteira ---
+Luna Toys (61993687124) - novo -> 120.0
+Bruna Severo (61999990000) - novo [VIP -20%] -> 96.0
+Creator Pro (61988887777) - novo -> 120.0
+Cliente 1 (61900000001) - novo -> 120.0
+Cliente 2 (61900000002) - novo -> 120.0
+Cliente 3 (61900000003) - novo -> 120.0
+Cliente 4 (61900000004) - novo -> 120.0
+Cliente 5 (61900000005) - novo -> 120.0
+Cliente 6 (61900000006) - novo -> 120.0
+Cliente 7 (61900000007) - novo -> 120.0
+Cliente 8 (61900000008) - novo -> 120.0
+Cliente 9 (61900000009) - novo -> 120.0
