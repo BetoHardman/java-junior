@@ -1,7 +1,10 @@
+import java.util.List;
+
+
 public interface Repositorio {
 
  void salvar(Cliente c);
- Cliente[] listar();
+ List<Cliente> listar();
  int total();
 
  }
