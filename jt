@@ -45,7 +45,16 @@ alvo(){
   ls -d "$DIAS"/dia* 2>/dev/null | sort | tail -1
 }
 
-# compila o dia e ecoa "pasta_onde_rodar|classpath".
+# descobre o nome completo da classe principal: le a linha "package" do Main.java
+classe_principal(){
+  local d="$1" mj pkg
+  mj=$(find "$d" -name Main.java 2>/dev/null | head -1)
+  [ -n "$mj" ] || { echo "Main"; return; }
+  pkg=$(grep -m1 '^[[:space:]]*package[[:space:]]' "$mj" | sed 's/^[[:space:]]*package[[:space:]]*//; s/[[:space:]]*;.*//')
+  if [ -n "$pkg" ]; then echo "$pkg.Main"; else echo "Main"; fi
+}
+
+# compila o dia e ecoa "pasta_onde_rodar|classpath|classe_principal".
 # dia com pom.xml vai pelo maven; o resto vai pelo javac de sempre.
 compilar(){
   local d="$1"
@@ -71,11 +80,11 @@ depois: source ~/.bashrc
     local libs=""
     [ -s "$d/target/cp.txt" ] && libs=";$(tr -d '
 ' < "$d/target/cp.txt")"
-    echo "$d|target/classes$libs"
+    echo "$d|target/classes$libs|$(classe_principal "$d")"
   else
     mkdir -p "$BUILD"; rm -f "$BUILD"/*.class 2>/dev/null
     javac -d "$BUILD" "$d"/*.java 2>/tmp/jt_erro || return 1
-    echo "$RAIZ|$BUILD"
+    echo "$RAIZ|$BUILD|$(classe_principal "$d")"
   fi
 }
 
@@ -107,7 +116,7 @@ JAVA
     [ -d "$d" ] || { vermelho "nao achei a pasta do dia"; exit 1; }
     if alvo_cp=$(compilar "$d"); then
       echo "--- saida ---"
-      ( cd "${alvo_cp%%|*}" && java -cp "${alvo_cp#*|}" Main )
+      ( cd "${alvo_cp%%|*}" && java -cp "$(echo "$alvo_cp" | cut -d'|' -f2)" "$(echo "$alvo_cp" | cut -d'|' -f3)" )
       echo "-------------"
       verde "compilou e rodou: $(basename "$d")"
     else
@@ -127,7 +136,7 @@ JAVA
     esperado="$d/esperado.txt"
     [ -f "$esperado" ] || { amarelo "sem esperado.txt em $(basename "$d") — nada a conferir"; exit 0; }
     alvo_cp=$(compilar "$d") || { vermelho "nao compilou:"; cat /tmp/jt_erro; exit 1; }
-    ( cd "${alvo_cp%%|*}" && java -cp "${alvo_cp#*|}" Main ) > /tmp/jt_saida 2>&1
+    ( cd "${alvo_cp%%|*}" && java -cp "$(echo "$alvo_cp" | cut -d'|' -f2)" "$(echo "$alvo_cp" | cut -d'|' -f3)" ) > /tmp/jt_saida 2>&1
     # normaliza fim de linha (java no Windows gera \r\n) e espaco no fim
     tr -d '\r' < /tmp/jt_saida | sed -e 's/[[:space:]]*$//' > /tmp/jt_a
     tr -d '\r' < "$esperado"   | sed -e 's/[[:space:]]*$//' > /tmp/jt_b

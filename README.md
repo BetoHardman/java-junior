@@ -33,6 +33,7 @@ O IntelliJ entra depois, quando digitar deixa de ensinar e passa a atrasar.
 | 10 | Buscar na lista: `for` + `if`, `.equals()` vs `==` | [dias/dia10](dias/dia10) |
 | 11 | `Map`, `HashMap`, `getOrDefault` · primeiro dia no IntelliJ | [dias/dia11](dias/dia11) |
 | 12 | Maven: `pom.xml`, `src/main/java`, dependências | [dias/dia12](dias/dia12) |
+| 13 | Pacotes: `package`, importar o próprio código, fronteira | [dias/dia13](dias/dia13) |
 
 Cada pasta tem o enunciado (`EXERCICIO.md`), o código e a saída esperada
 (`esperado.txt`) usada como teste.
