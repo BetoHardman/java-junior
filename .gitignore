@@ -3,3 +3,6 @@
 target/
 .jt-log/
 .notas-privadas/
+.idea/
+*.iml
+out/

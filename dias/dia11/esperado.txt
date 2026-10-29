@@ -1,0 +1,9 @@
+--- resumo da carteira ---
+novo: 1
+contato: 2
+fechado: 2
+--- armadilha ---
+perdido com get: null
+perdido com getOrDefault: 0
+soma do resumo: 5
+total do repositorio: 5
