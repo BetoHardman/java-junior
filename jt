@@ -40,9 +40,34 @@ alvo(){
   # ignora pasta vazia: so vale a que tem .java dentro
   local d
   for d in $(ls -d "$DIAS"/dia* 2>/dev/null | sort -r); do
-    if ls "$d"/*.java >/dev/null 2>&1; then echo "$d"; return; fi
+    if ls "$d"/*.java >/dev/null 2>&1 || [ -f "$d/pom.xml" ]; then echo "$d"; return; fi
   done
   ls -d "$DIAS"/dia* 2>/dev/null | sort | tail -1
+}
+
+# compila o dia e ecoa "pasta_onde_rodar|classpath".
+# dia com pom.xml vai pelo maven; o resto vai pelo javac de sempre.
+compilar(){
+  local d="$1"
+  if [ -f "$d/pom.xml" ]; then
+    if ! command -v mvn >/dev/null 2>&1; then
+      printf 'o mvn nao esta no PATH.
+acrescente no fim do seu ~/.bashrc:
+  export PATH="$PATH:%s"
+depois: source ~/.bashrc
+'         "/c/Program Files/JetBrains/IntelliJ IDEA Community Edition 2024.3.3/plugins/maven/lib/maven3/bin" > /tmp/jt_erro
+      return 1
+    fi
+    # build-classpath escreve em target/cp.txt o caminho dos .jar das dependencias
+    ( cd "$d"       && mvn -q compile       && mvn -q dependency:build-classpath -Dmdep.outputFile=target/cp.txt ) > /tmp/jt_erro 2>&1 || return 1
+    local libs=""
+    [ -s "$d/target/cp.txt" ] && libs=";$(tr -d '' < "$d/target/cp.txt")"
+    echo "$d|target/classes$libs"
+  else
+    mkdir -p "$BUILD"; rm -f "$BUILD"/*.class 2>/dev/null
+    javac -d "$BUILD" "$d"/*.java 2>/tmp/jt_erro || return 1
+    echo "$RAIZ|$BUILD"
+  fi
 }
 
 case "${1:-ajuda}" in
@@ -71,11 +96,9 @@ JAVA
   run|r|rodar)
     d=$(alvo "${2:-}")
     [ -d "$d" ] || { vermelho "nao achei a pasta do dia"; exit 1; }
-    mkdir -p "$BUILD"
-    rm -f "$BUILD"/*.class 2>/dev/null
-    if javac -d "$BUILD" "$d"/*.java 2>/tmp/jt_erro; then
+    if alvo_cp=$(compilar "$d"); then
       echo "--- saida ---"
-      java -cp "$BUILD" Main
+      ( cd "${alvo_cp%%|*}" && java -cp "${alvo_cp#*|}" Main )
       echo "-------------"
       verde "compilou e rodou: $(basename "$d")"
     else
@@ -94,9 +117,8 @@ JAVA
     d=$(alvo "${2:-}")
     esperado="$d/esperado.txt"
     [ -f "$esperado" ] || { amarelo "sem esperado.txt em $(basename "$d") — nada a conferir"; exit 0; }
-    mkdir -p "$BUILD"; rm -f "$BUILD"/*.class 2>/dev/null
-    javac -d "$BUILD" "$d"/*.java 2>/tmp/jt_erro || { vermelho "nao compilou:"; cat /tmp/jt_erro; exit 1; }
-    java -cp "$BUILD" Main > /tmp/jt_saida 2>&1
+    alvo_cp=$(compilar "$d") || { vermelho "nao compilou:"; cat /tmp/jt_erro; exit 1; }
+    ( cd "${alvo_cp%%|*}" && java -cp "${alvo_cp#*|}" Main ) > /tmp/jt_saida 2>&1
     # normaliza fim de linha (java no Windows gera \r\n) e espaco no fim
     tr -d '\r' < /tmp/jt_saida | sed -e 's/[[:space:]]*$//' > /tmp/jt_a
     tr -d '\r' < "$esperado"   | sed -e 's/[[:space:]]*$//' > /tmp/jt_b
