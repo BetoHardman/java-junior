@@ -7,17 +7,21 @@
 
   <!-- o endereco DESTE projeto -->
   <groupId>br.com.betohardman</groupId>
-  <artifactId>TODO-1</artifactId>
+  <artifactId>dia12</artifactId>
   <version>1.0-SNAPSHOT</version>
 
   <properties>
-    <maven.compiler.release>TODO-2</maven.compiler.release>
+    <maven.compiler.release>21</maven.compiler.release>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
   <!-- o endereco das bibliotecas que ESTE projeto usa -->
   <dependencies>
-    <!-- TODO-3 -->
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.17.0</version>
+    </dependency>
   </dependencies>
 
 </project>

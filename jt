@@ -50,7 +50,15 @@ alvo(){
 compilar(){
   local d="$1"
   if [ -f "$d/pom.xml" ]; then
+    # se o mvn nao estiver no PATH, usa o que vem dentro do IntelliJ
+    local MVN="mvn"
     if ! command -v mvn >/dev/null 2>&1; then
+      local m
+      for m in "/c/Program Files/JetBrains"/*/plugins/maven/lib/maven3/bin/mvn                "$HOME/AppData/Local/JetBrains"/*/plugins/maven/lib/maven3/bin/mvn; do
+        [ -x "$m" ] && MVN="$m" && break
+      done
+    fi
+    if [ "$MVN" = "mvn" ] && ! command -v mvn >/dev/null 2>&1; then
       printf 'o mvn nao esta no PATH.
 acrescente no fim do seu ~/.bashrc:
   export PATH="$PATH:%s"
@@ -59,9 +67,10 @@ depois: source ~/.bashrc
       return 1
     fi
     # build-classpath escreve em target/cp.txt o caminho dos .jar das dependencias
-    ( cd "$d"       && mvn -q compile       && mvn -q dependency:build-classpath -Dmdep.outputFile=target/cp.txt ) > /tmp/jt_erro 2>&1 || return 1
+    ( cd "$d"       && "$MVN" -q compile       && "$MVN" -q dependency:build-classpath -Dmdep.outputFile=target/cp.txt ) > /tmp/jt_erro 2>&1 || return 1
     local libs=""
-    [ -s "$d/target/cp.txt" ] && libs=";$(tr -d '' < "$d/target/cp.txt")"
+    [ -s "$d/target/cp.txt" ] && libs=";$(tr -d '
+' < "$d/target/cp.txt")"
     echo "$d|target/classes$libs"
   else
     mkdir -p "$BUILD"; rm -f "$BUILD"/*.class 2>/dev/null
