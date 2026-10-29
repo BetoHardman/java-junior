@@ -1,4 +1,6 @@
 import java.util.List;
+import java.util.Map;
+
 
 
 public interface Repositorio {
@@ -7,6 +9,7 @@ public interface Repositorio {
  List<Cliente> porStatus(String status);
  List<Cliente> listar();
  int total();
+ Map<String, Integer> contarPorStatus();
 
  }
 

@@ -202,6 +202,54 @@ repositorio e quem vai **usar** ele (o `Main`, ou o Spring).
 
 ---
 
+### Dentro dos parenteses nunca vai tipo (dia 11)
+
+Essa e a mesma pergunta "criando ou usando?", aplicada na hora da chamada.
+
+```java
+String chave = c.getStatus();                               // CRIANDO -> tem tipo
+contagem.put(chave, contagem.getOrDefault(chave, 0) + 1);   // USANDO  -> so o nome
+```
+
+| Onde | Escreve o tipo? |
+|---|---|
+| declarando uma variavel nova | **sim** — `String chave = ...` |
+| dentro dos `( )` de uma chamada | **nunca** — so o nome |
+
+Voce ja faz isso certo desde o dia 9 sem perceber:
+
+```java
+achados.add(c);          // e nao achados.add(Cliente c)
+contagem.put(chave, n);  // mesma coisa
+```
+
+Escrever o tipo de novo da `variable X is already defined`.
+
+### `put` e `add` sao ordens, nao resultados
+
+```java
+achados.add(c);                              // sem "= alguma coisa" na frente
+contagem.put(chave, valor);                  // idem
+int quantos = contagem.getOrDefault(k, 0);   // esse SIM devolve, da pra guardar
+```
+
+Se a linha comeca com um tipo (`int i ...`), voce esta guardando um resultado.
+`add` e `put` nao te dao resultado pra guardar — eles fazem e pronto.
+
+### `get` x `getOrDefault` num Map
+
+| | Chave nao existe |
+|---|---|
+| `mapa.get(k)` | devolve **`null`** |
+| `mapa.getOrDefault(k, 0)` | devolve **`0`** |
+
+```java
+int x = mapa.get("perdido");   // compila liso, quebra rodando: NullPointerException
+```
+
+Contagem sempre com `getOrDefault`: no primeiro de cada chave voce precisa de zero,
+nao de `null`.
+
 ## 6. Git — o mínimo que você usa todo dia
 
 ```bash

@@ -1,5 +1,8 @@
+import javax.lang.model.element.NestingKind;
 import java.util.ArrayList;
-import java.util.List; 
+import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
   
  public class RepositorioMemoria implements Repositorio {
 
@@ -32,5 +35,20 @@ import java.util.List;
 
     return achados;
  }
+
+ @Override
+  public Map<String, Integer> contarPorStatus() {
+  Map<String, Integer> contagem = new HashMap<>();
+
+  for (Cliente c : itens) {
+    String chave = c.getStatus();
+    contagem.put(chave, contagem.getOrDefault(chave, 0) + 1);
+
+
+  }
+  return contagem;
+ }
+
+
 
 }
