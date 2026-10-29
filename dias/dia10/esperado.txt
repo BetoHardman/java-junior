@@ -1,0 +1,10 @@
+status invalido: perdido
+novo: 1
+  Creator Pro (61988887777) - novo
+contato: 1
+  Bruna Severo (61999990000) - contato [VIP -20%]
+fechado: 1
+  Luna Toys (61993687124) - fechado
+--- armadilha ---
+== : false
+equals: true

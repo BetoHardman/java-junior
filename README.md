@@ -29,6 +29,8 @@ O IntelliJ entra depois, quando digitar deixa de ensinar e passa a atrasar.
 | 06 | Encapsulamento: `private`, getters, setter com validação | [dias/dia06](dias/dia06) |
 | 07 | Herança, `super`, `@Override`, polimorfismo | [dias/dia07](dias/dia07) |
 | 08 | Interface: contrato, `implements`, programar contra o tipo | [dias/dia08](dias/dia08) |
+| 09 | `ArrayList`, generics `List<Cliente>`, `import` | [dias/dia09](dias/dia09) |
+| 10 | Buscar na lista: `for` + `if`, `.equals()` vs `==` | [dias/dia10](dias/dia10) |
 
 Cada pasta tem o enunciado (`EXERCICIO.md`), o código e a saída esperada
 (`esperado.txt`) usada como teste.
