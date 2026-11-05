@@ -1,3 +1,5 @@
+package br.com.betohardman.leads.modelo;
+
 public class Cliente {
     protected String nome;
     protected String whatsapp;

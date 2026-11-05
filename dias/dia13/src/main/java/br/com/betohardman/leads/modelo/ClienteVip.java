@@ -1,3 +1,5 @@
+package br.com.betohardman.leads.modelo;
+
 public class ClienteVip extends Cliente {
 
  private int desconto; 

@@ -1,8 +1,10 @@
-import javax.lang.model.element.NestingKind;
+package br.com.betohardman.leads.repositorio;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+import br.com.betohardman.leads.modelo.Cliente;
   
  public class RepositorioMemoria implements Repositorio {
 
