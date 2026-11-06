@@ -1,12 +1,12 @@
 package br.com.betohardman.leads;
 
-// TODO-1: o import do SpringBootApplication
-// TODO-2: o import do SpringApplication
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
-// TODO-1: a anotacao que marca esta classe como a porta de entrada
+ @SpringBootApplication
 public class Main {
     public static void main(String[] args) {
-        // TODO-2: a linha que liga o Spring
+       SpringApplication.run(Main.class, args);
     }
 }

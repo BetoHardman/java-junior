@@ -1,12 +1,13 @@
 package br.com.betohardman.leads.repositorio;
 
+import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import br.com.betohardman.leads.modelo.Cliente;
   
- // TODO-3: a anotacao que entrega esta classe pro Spring
+ @Repository
  public class RepositorioMemoria implements Repositorio {
 
  private List<Cliente> itens = new ArrayList<>(); 
