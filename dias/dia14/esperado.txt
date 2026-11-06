@@ -1,0 +1,12 @@
+========== CARTEIRA ==========
+novo........1
+contato.....2
+fechado.....2
+------------------------------
+Luna Toys (61993687124) - fechado
+Bruna Severo (61999990000) - contato [VIP -20%]
+Creator Pro (61988887777) - contato
+Dona Lu Doces (61977776666) - fechado
+Studio Alon (61966665555) - novo [VIP -10%]
+==============================
+total: 5

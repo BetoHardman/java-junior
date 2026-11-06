@@ -34,6 +34,7 @@ O IntelliJ entra depois, quando digitar deixa de ensinar e passa a atrasar.
 | 11 | `Map`, `HashMap`, `getOrDefault` · primeiro dia no IntelliJ | [dias/dia11](dias/dia11) |
 | 12 | Maven: `pom.xml`, `src/main/java`, dependências | [dias/dia12](dias/dia12) |
 | 13 | Pacotes: `package`, importar o próprio código, fronteira | [dias/dia13](dias/dia13) |
+| 14 | Spring Boot: `@SpringBootApplication`, `@Component`, injeção de dependência | [dias/dia14](dias/dia14) |
 
 Cada pasta tem o enunciado (`EXERCICIO.md`), o código e a saída esperada
 (`esperado.txt`) usada como teste.
