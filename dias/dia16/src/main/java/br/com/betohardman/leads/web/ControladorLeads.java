@@ -3,8 +3,8 @@ package br.com.betohardman.leads.web;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
-// TODO-2: o import do PostMapping
-// TODO-3: o import do RequestBody
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.betohardman.leads.modelo.Cliente;
@@ -24,10 +24,11 @@ public class ControladorLeads {
         return repo.listar();
     }
 
-    // TODO-4: a anotacao que atende POST no endereco /leads
-    public Cliente criar(/* TODO-5: o parametro que recebe o corpo do pedido */) {
-        // TODO-6: montar o Cliente com os dados do NovoLead,
-        //         salvar no repositorio e devolver ele.
-        return null;
-    }
+    @PostMapping("/leads")
+        public Cliente criar(@RequestBody NovoLead novo) {
+           Cliente c = new Cliente(novo.nome(), novo.whatsapp());
+           repo.salvar(c);
+           return c;
+
+        }
 }

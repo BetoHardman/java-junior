@@ -33,11 +33,11 @@ public class Cliente {
  return status;
  }
     public void mudarStatus(String novo) {
- if (novo.equals("novo") ||
- novo.equals("contato") ||
- novo.equals("fechado")) {
+    if (novo.equals("novo") ||
+    novo.equals("contato") ||
+    novo.equals("fechado")) {
 
- this.status = novo;
+    this.status = novo;
 
 
  } else {
