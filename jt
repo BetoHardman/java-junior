@@ -88,6 +88,67 @@ depois: source ~/.bashrc
   fi
 }
 
+# um dia e "web" quando o pom pede o spring-boot-starter-web.
+# dia web sobe um servidor e NAO termina sozinho.
+eh_web(){ [ -f "$1/pom.xml" ] && grep -q 'spring-boot-starter-web' "$1/pom.xml"; }
+
+PORTA=8080
+
+# roda o dia e guarda tudo em $2.
+#   dia normal : roda e espera terminar, como sempre.
+#   dia web    : sobe o servidor, espera a porta atender, dispara as
+#                requisicoes de requisicoes.txt com curl e encerra.
+rodar_saida(){
+  local alvo_cp="$1" arq="$2" d="$3"
+  local dir cp cls
+  dir="${alvo_cp%%|*}"
+  cp=$(echo "$alvo_cp" | cut -d'|' -f2)
+  cls=$(echo "$alvo_cp" | cut -d'|' -f3)
+
+  if ! eh_web "$d"; then
+    ( cd "$dir" && java -cp "$cp" "$cls" ) > "$arq" 2>&1
+    return 0
+  fi
+
+  : > "$arq"
+  ( cd "$dir" && exec java -cp "$cp" "$cls" ) > "$arq" 2>&1 &
+  local pid=$! i=0 pronto=nao
+  # espera o servidor atender (ate 90s — a 1a build baixa o Spring inteiro)
+  while [ $i -lt 90 ]; do
+    if curl -s -o /dev/null -m 2 "http://localhost:$PORTA/"; then pronto=sim; break; fi
+    kill -0 "$pid" 2>/dev/null || break
+    sleep 1; i=$((i+1))
+  done
+
+  if [ "$pronto" = "nao" ]; then
+    echo "--- o servidor nao subiu na porta $PORTA ---" >> "$arq"
+  elif [ -f "$d/requisicoes.txt" ]; then
+    local linha metodo caminho corpo
+    while IFS= read -r linha || [ -n "$linha" ]; do
+      linha="${linha%$'\r'}"
+      [ -z "$linha" ] && continue
+      case "$linha" in \#*) continue ;; esac
+      metodo=$(printf '%s' "$linha" | awk '{print $1}')
+      caminho=$(printf '%s' "$linha" | awk '{print $2}')
+      corpo=$(printf '%s' "$linha" | cut -s -d' ' -f3-)
+      printf -- '--- %s %s ---\n' "$metodo" "$caminho" >> "$arq"
+      if [ -n "$corpo" ]; then
+        curl -s -X "$metodo" -H "Content-Type: application/json" \
+             -d "$corpo" "http://localhost:$PORTA$caminho" >> "$arq"
+      else
+        curl -s -X "$metodo" "http://localhost:$PORTA$caminho" >> "$arq"
+      fi
+      printf '\n' >> "$arq"
+    done < "$d/requisicoes.txt"
+  fi
+
+  kill "$pid" 2>/dev/null
+  sleep 1
+  kill -9 "$pid" 2>/dev/null
+  wait "$pid" 2>/dev/null
+  return 0
+}
+
 case "${1:-ajuda}" in
 
   novo|criar|new)
@@ -116,6 +177,10 @@ JAVA
     [ -d "$d" ] || { vermelho "nao achei a pasta do dia"; exit 1; }
     if alvo_cp=$(compilar "$d"); then
       echo "--- saida ---"
+      if eh_web "$d"; then
+        amarelo "dia web: o servidor fica no ar. abra http://localhost:$PORTA/leads no navegador."
+        amarelo "pra parar: Ctrl+C aqui no terminal."
+      fi
       ( cd "${alvo_cp%%|*}" && java -cp "$(echo "$alvo_cp" | cut -d'|' -f2)" "$(echo "$alvo_cp" | cut -d'|' -f3)" )
       echo "-------------"
       verde "compilou e rodou: $(basename "$d")"
@@ -136,7 +201,8 @@ JAVA
     esperado="$d/esperado.txt"
     [ -f "$esperado" ] || { amarelo "sem esperado.txt em $(basename "$d") — nada a conferir"; exit 0; }
     alvo_cp=$(compilar "$d") || { vermelho "nao compilou:"; cat /tmp/jt_erro; exit 1; }
-    ( cd "${alvo_cp%%|*}" && java -cp "$(echo "$alvo_cp" | cut -d'|' -f2)" "$(echo "$alvo_cp" | cut -d'|' -f3)" ) > /tmp/jt_saida 2>&1
+    eh_web "$d" && amarelo "dia web: subindo o servidor e chamando os enderecos..."
+    rodar_saida "$alvo_cp" /tmp/jt_saida "$d"
     # normaliza fim de linha (java no Windows gera \r\n) e espaco no fim
     tr -d '\r' < /tmp/jt_saida | sed -e 's/[[:space:]]*$//' > /tmp/jt_a
     tr -d '\r' < "$esperado"   | sed -e 's/[[:space:]]*$//' > /tmp/jt_b

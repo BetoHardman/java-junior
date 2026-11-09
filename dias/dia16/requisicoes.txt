@@ -1,0 +1,3 @@
+GET /leads
+POST /leads {"nome":"Alon Warm","whatsapp":"61900001111"}
+GET /leads
