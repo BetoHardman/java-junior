@@ -18,11 +18,17 @@ public class Cliente {
 
  public String resumo() {
  return nome + " (" + whatsapp + ") - " + status;
- } 
+ }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public String getWhatsapp() {
+        return whatsapp;
+    }
 
 
-    // TODO-4: o getter do nome
-    // TODO-5: o getter do whatsapp
 
     public String getStatus() {
  return status;

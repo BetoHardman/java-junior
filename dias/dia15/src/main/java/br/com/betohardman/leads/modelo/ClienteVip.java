@@ -20,7 +20,11 @@ public class ClienteVip extends Cliente {
   return super.resumo() + " [VIP -" + desconto + "%]";
  }
 
-    // TODO-6: o getter do desconto (devolve int, nao String)
+ public int getDesconto() {
+  return desconto;
+ }
+
+
 
 
 
