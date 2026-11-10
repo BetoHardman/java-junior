@@ -10,5 +10,5 @@ Dona Lu Doces (61977776666) - fechado
 Studio Alon (61966665555) - novo [VIP -10%]
 ==============================
 total: 5
---- GET /leads ---
+--- GET /leads -> 200 ---
 [{"nome":"Luna Toys","whatsapp":"61993687124","status":"fechado"},{"nome":"Bruna Severo","whatsapp":"61999990000","desconto":20,"status":"contato"},{"nome":"Creator Pro","whatsapp":"61988887777","status":"contato"},{"nome":"Dona Lu Doces","whatsapp":"61977776666","status":"fechado"},{"nome":"Studio Alon","whatsapp":"61966665555","desconto":10,"status":"novo"}]

@@ -37,6 +37,7 @@ O IntelliJ entra depois, quando digitar deixa de ensinar e passa a atrasar.
 | 14 | Spring Boot: `@SpringBootApplication`, `@Component`, injeção de dependência | [dias/dia14](dias/dia14) |
 | 15 | API REST: `@RestController`, `@GetMapping`, JSON e getters | [dias/dia15](dias/dia15) |
 | 16 | `POST /leads`: `@RequestBody`, `record` como DTO | [dias/dia16](dias/dia16) |
+| 17 | Validação: `@NotBlank`, `@Pattern`, `@Valid` e o 400 | [dias/dia17](dias/dia17) |
 
 Cada pasta tem o enunciado (`EXERCICIO.md`), o código e a saída esperada
 (`esperado.txt`) usada como teste.
