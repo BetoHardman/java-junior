@@ -8,22 +8,24 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-// TODO-1: a anotacao que diz "esta classe cuida dos erros de TODOS os controladores"
+    @RestControllerAdvice
 public class TratadorDeErros {
 
-    // TODO-2: a anotacao que define o codigo HTTP da resposta: 400, BAD_REQUEST
-    // TODO-3: a anotacao que diz QUAL excecao este metodo atende
+        @ResponseStatus(HttpStatus.BAD_REQUEST)
+        @ExceptionHandler(MethodArgumentNotValidException.class)
+
     public Map<String, String> tratarValidacao(MethodArgumentNotValidException e) {
 
-        // TODO-4: criar um Map<String, String> vazio chamado erros
+        Map<String, String> erros = new HashMap<>();
 
-        // TODO-5: o laco que percorre e.getBindingResult().getFieldErrors().
-        //         Para cada erro, poe no mapa: a chave e o campo,
-        //         o valor e a mensagem.
+        for (FieldError erro : e.getBindingResult().getFieldErrors()){
+            erros.put(erro.getField(), erro.getDefaultMessage());
+        }
+    return erros;
 
-        // TODO-6: devolver o mapa, no lugar deste null
-        return null;
+
     }
 }
