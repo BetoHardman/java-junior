@@ -2,7 +2,7 @@ package br.com.betohardman.leads.web;
 
 import java.util.List;
 
-// TODO-4: o import do Valid
+import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,7 +27,7 @@ public class ControladorLeads {
     }
 
     @PostMapping("/leads")
-        public Cliente criar(/* TODO-4: a anotacao que manda conferir */ @RequestBody NovoLead novo) {
+        public Cliente criar(@Valid @RequestBody NovoLead novo) {
            Cliente c = new Cliente(novo.nome(), novo.whatsapp());
            repo.salvar(c);
            return c;
