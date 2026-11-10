@@ -38,6 +38,7 @@ O IntelliJ entra depois, quando digitar deixa de ensinar e passa a atrasar.
 | 15 | API REST: `@RestController`, `@GetMapping`, JSON e getters | [dias/dia15](dias/dia15) |
 | 16 | `POST /leads`: `@RequestBody`, `record` como DTO | [dias/dia16](dias/dia16) |
 | 17 | Validação: `@NotBlank`, `@Pattern`, `@Valid` e o 400 | [dias/dia17](dias/dia17) |
+| 18 | Erros com mensagem: `@RestControllerAdvice` e `@ExceptionHandler` | [dias/dia18](dias/dia18) |
 
 Cada pasta tem o enunciado (`EXERCICIO.md`), o código e a saída esperada
 (`esperado.txt`) usada como teste.
