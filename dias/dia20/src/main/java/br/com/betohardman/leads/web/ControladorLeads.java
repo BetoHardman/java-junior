@@ -5,6 +5,7 @@ import java.util.Map;
 
 import jakarta.validation.Valid;
 
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,23 +27,28 @@ public class ControladorLeads {
     }
 
     @GetMapping("/leads")
-    public List<Cliente> listar(/* TODO-1: o parametro opcional ?status= */) {
+    public List<Cliente> listar(@RequestParam(required = false) String status) {
+        if (status == null) {
+            return repo.listar();
+        }
+    return repo.porStatus(status);
 
-        // TODO-2: se nao veio status, devolver a lista inteira (repo.listar()).
-        //         Se veio, devolver so os daquele status (repo.porStatus(...)).
-
-        return repo.listar();
     }
 
-    // TODO-3: a anotacao que atende GET no endereco /leads/resumo
+    @GetMapping("/leads/resumo")
     public Map<String, Integer> resumo() {
-        // TODO-4: devolver a contagem por status que o repositorio ja sabe fazer
-        return null;
+
+        return repo.contarPorStatus();
     }
 
-    // TODO-5: o metodo inteiro que atende GET /leads/{id} e devolve UM lead.
-    //         E o mesmo desenho do PUT la embaixo, sem a parte de mudar:
-    //         anotacao, @PathVariable, procurar, 404 se nao achar, devolver.
+    @GetMapping("/leads/{id}")
+    public Cliente buscar (@PathVariable Long id) {
+        Cliente c = repo.buscarPorId(id);
+        if (c == null) {
+            throw new LeadNaoEncontrado();
+        }
+        return c;
+    }
 
 
     @PostMapping("/leads")
