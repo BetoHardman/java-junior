@@ -36,14 +36,15 @@ public class ControladorLeads {
 
         }
 
-    // TODO-2: a anotacao que atende PUT no endereco /leads/{id}
-    public Cliente mudarStatus(/* TODO-3: o parametro que pega o {id} do endereco */
+    @PutMapping("/leads/{id}")
+    public Cliente mudarStatus(@PathVariable Long id,
                                @Valid @RequestBody MudarStatus mudanca) {
+        Cliente c = repo.buscarPorId(id);
+        if (c == null) {
+            throw new LeadNaoEncontrado();
+        }
 
-        // TODO-4: procurar o lead pelo id no repositorio.
-        //         Se nao achar (veio null), lancar new LeadNaoEncontrado().
-        //         Achando, mudar o status dele e devolver.
-
-        return null;
+        c.mudarStatus(mudanca.status());
+        return c;
     }
 }

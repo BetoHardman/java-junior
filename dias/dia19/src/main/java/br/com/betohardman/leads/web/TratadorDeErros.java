@@ -29,7 +29,11 @@ public class TratadorDeErros {
 
     }
 
-    // TODO-5: um segundo metodo de plantao, igual ao de cima, mas para a
-    //         excecao LeadNaoEncontrado. O codigo e 404 (HttpStatus.NOT_FOUND)
-    //         e o corpo e Map.of("erro", "lead nao encontrado").
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+        @ExceptionHandler(LeadNaoEncontrado.class)
+
+        public Map <String, String> tratarNaoEncontrado(LeadNaoEncontrado e) {
+            return Map.of("erro", "lead nao encontrado");
+    }
+
 }
