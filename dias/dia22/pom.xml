@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>4.1.1</version>
+    <relativePath/>
+  </parent>
+
+  <groupId>br.com.betohardman</groupId>
+  <artifactId>dia22</artifactId>
+  <version>1.0-SNAPSHOT</version>
+
+  <properties>
+    <java.version>21</java.version>
+  </properties>
+
+  <dependencies>
+    <!-- NOVIDADE DO DIA: o starter-WEB.
+         Ele traz o starter de ontem POR DENTRO, mais duas coisas novas:
+           1. Tomcat  — o servidor que atende o navegador
+           2. Jackson — o tradutor que vira objeto Java em JSON
+         Uma linha de dependencia, um servidor inteiro. -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+
+    <!-- NOVIDADE DO DIA: o starter de validacao.
+         Ele traz as anotacoes @NotBlank, @Pattern, @Size e companhia,
+         mais o motor que as executa antes do seu metodo rodar. -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-validation</artifactId>
+    </dependency>
+
+    <!-- NOVIDADE DO DIA 1: o starter de JPA.
+         Traz o Hibernate, que traduz objeto Java em linha de tabela. -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
+
+    <!-- NOVIDADE DO DIA 2: o H2, um banco que roda dentro do proprio
+         programa. Zero instalacao. Trocar por Postgres depois e
+         mudar esta dependencia e tres linhas do application.properties. -->
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+    </dependency>
+  </dependencies>
+
+</project>
