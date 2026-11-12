@@ -43,7 +43,7 @@ public class ServicoDeLeads {
     public Cliente mudarStatus(Long id, String novoStatus) {
         Cliente c = buscar(id);
         c.mudarStatus(novoStatus);
-        // TODO-6: uma linha aqui. Com banco, mudar o objeto nao basta.
+        repo.salvar(c);
         return c;
         }
 

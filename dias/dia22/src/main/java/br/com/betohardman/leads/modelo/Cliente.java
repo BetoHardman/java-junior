@@ -7,27 +7,19 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 
-// @Entity = "esta classe vira uma TABELA no banco".
-// @Inheritance = Cliente e ClienteVip dividem a mesma tabela; o Hibernate
-// cria sozinho uma coluna DTYPE pra saber quem e quem.
-// TODO-1: a anotacao que diz "esta classe vira uma TABELA no banco"
+
+    @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Cliente {
 
-    // @Id = esta e a chave primaria.
-    // @GeneratedValue = quem gera o numero agora e o BANCO, nao o seu codigo.
-    // TODO-2: duas anotacoes aqui, uma por linha:
-    //   a) a que marca este campo como chave primaria
-    //   b) a que manda o BANCO gerar o numero:
-    //      @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     protected String nome;
     protected String whatsapp;
     protected String status;
  
-    // O Hibernate precisa montar o objeto vazio antes de preencher campo a
-    // campo com o que veio do banco. Por isso este construtor sem argumento.
-    // protected = ninguem de fora usa, so o framework.
+
     protected Cliente() {
     }
 

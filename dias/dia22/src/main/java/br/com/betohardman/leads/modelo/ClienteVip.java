@@ -2,7 +2,7 @@ package br.com.betohardman.leads.modelo;
 
 import jakarta.persistence.Entity;
 
-// TODO-3: a mesma anotacao do TODO-1, aqui tambem
+ @Entity
 public class ClienteVip extends Cliente {
 
  private int desconto; 

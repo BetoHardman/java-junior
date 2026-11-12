@@ -23,7 +23,7 @@ public class RepositorioBanco implements Repositorio {
 
     @Override
     public void salvar(Cliente c) {
-        // TODO-5a: mandar o jpa guardar
+        jpa.save(c);
     }
 
     @Override
@@ -40,8 +40,7 @@ public class RepositorioBanco implements Repositorio {
 
     @Override
     public List<Cliente> porStatus(String status) {
-        // TODO-5b: chamar o metodo que voce declarou no TODO-4
-        return null;
+        return jpa.findByStatus(status);
     }
 
     @Override
