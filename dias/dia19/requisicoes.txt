@@ -1,0 +1,5 @@
+GET /leads
+PUT /leads/1 {"status":"contato"}
+PUT /leads/999 {"status":"contato"}
+PUT /leads/2 {"status":""}
+GET /leads

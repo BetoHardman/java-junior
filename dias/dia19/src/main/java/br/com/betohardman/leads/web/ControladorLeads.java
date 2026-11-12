@@ -1,0 +1,49 @@
+package br.com.betohardman.leads.web;
+
+import java.util.List;
+
+import jakarta.validation.Valid;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import br.com.betohardman.leads.modelo.Cliente;
+import br.com.betohardman.leads.repositorio.Repositorio;
+
+@RestController
+public class ControladorLeads {
+
+    private final Repositorio repo;
+
+    public ControladorLeads(Repositorio repo) {
+        this.repo = repo;
+    }
+
+    @GetMapping("/leads")
+    public List<Cliente> listar() {
+        return repo.listar();
+    }
+
+    @PostMapping("/leads")
+        public Cliente criar(@Valid @RequestBody NovoLead novo) {
+           Cliente c = new Cliente(novo.nome(), novo.whatsapp());
+           repo.salvar(c);
+           return c;
+
+        }
+
+    // TODO-2: a anotacao que atende PUT no endereco /leads/{id}
+    public Cliente mudarStatus(/* TODO-3: o parametro que pega o {id} do endereco */
+                               @Valid @RequestBody MudarStatus mudanca) {
+
+        // TODO-4: procurar o lead pelo id no repositorio.
+        //         Se nao achar (veio null), lancar new LeadNaoEncontrado().
+        //         Achando, mudar o status dele e devolver.
+
+        return null;
+    }
+}

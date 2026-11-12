@@ -1,0 +1,22 @@
+========== CARTEIRA ==========
+novo........1
+contato.....2
+fechado.....2
+------------------------------
+Luna Toys (61993687124) - fechado
+Bruna Severo (61999990000) - contato [VIP -20%]
+Creator Pro (61988887777) - contato
+Dona Lu Doces (61977776666) - fechado
+Studio Alon (61966665555) - novo [VIP -10%]
+==============================
+total: 5
+--- GET /leads -> 200 ---
+[{"nome":"Luna Toys","whatsapp":"61993687124","id":1,"status":"fechado"},{"nome":"Bruna Severo","whatsapp":"61999990000","desconto":20,"id":2,"status":"contato"},{"nome":"Creator Pro","whatsapp":"61988887777","id":3,"status":"contato"},{"nome":"Dona Lu Doces","whatsapp":"61977776666","id":4,"status":"fechado"},{"nome":"Studio Alon","whatsapp":"61966665555","desconto":10,"id":5,"status":"novo"}]
+--- PUT /leads/1 -> 200 ---
+{"nome":"Luna Toys","whatsapp":"61993687124","id":1,"status":"contato"}
+--- PUT /leads/999 -> 404 ---
+{"erro":"lead nao encontrado"}
+--- PUT /leads/2 -> 400 ---
+{"status":"status e obrigatorio"}
+--- GET /leads -> 200 ---
+[{"nome":"Luna Toys","whatsapp":"61993687124","id":1,"status":"contato"},{"nome":"Bruna Severo","whatsapp":"61999990000","desconto":20,"id":2,"status":"contato"},{"nome":"Creator Pro","whatsapp":"61988887777","id":3,"status":"contato"},{"nome":"Dona Lu Doces","whatsapp":"61977776666","id":4,"status":"fechado"},{"nome":"Studio Alon","whatsapp":"61966665555","desconto":10,"id":5,"status":"novo"}]

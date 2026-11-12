@@ -1,0 +1,5 @@
+GET /leads/resumo
+GET /leads?status=contato
+GET /leads/3
+GET /leads/999
+GET /leads
