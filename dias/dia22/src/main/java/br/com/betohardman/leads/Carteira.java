@@ -32,8 +32,10 @@ public class Carteira implements CommandLineRunner {
         Cliente lu      = new Cliente("Dona Lu Doces", "61977776666");
         Cliente studio  = new ClienteVip("Studio Alon", "61966665555", 10);
 
-        // ATENCAO — esta ordem MUDOU no dia 22, e o motivo importa.
-        // Antes era salvar primeiro e mudar o status depois: funcionava
+        if (repo.total() > 0) {
+
+            return;
+        }
         // porque o ArrayList guardava o MESMO objeto que estava aqui.
         // Com banco nao funciona mais. Depois do salvar, o objeto que voce
         // tem na mao e so uma copia; mexer nele nao mexe na linha da tabela.

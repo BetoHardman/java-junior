@@ -35,7 +35,7 @@ public class RepositorioBanco implements Repositorio {
 
     @Override
     public void remover(Long id) {
-        // TODO-4: o metodo do JpaRepository que apaga pelo id
+        jpa.deleteById(id);
     }
 
     @Override

@@ -35,9 +35,7 @@ public class ServicoDeLeads {
     }
 
     public void remover(Long id) {
-        // TODO-5: duas linhas.
-        //   1. garantir que o lead existe (e dar 404 se nao existir)
-        //   2. mandar o repositorio apagar
+    repo.remover(id);
     }
 
     public Cliente criar(String nome, String whatsapp) {

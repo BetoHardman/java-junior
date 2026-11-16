@@ -10,7 +10,7 @@ import jakarta.persistence.InheritanceType;
 
     @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public class Cliente {
+public class    Cliente {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

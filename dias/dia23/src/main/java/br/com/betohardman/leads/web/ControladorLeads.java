@@ -55,8 +55,8 @@ public class ControladorLeads {
         return servico.mudarStatus(id, mudanca.status());
     }
 
-    // TODO-6a: a anotacao que define o codigo da resposta: 204, NO_CONTENT
-    // TODO-6b: a anotacao que atende DELETE no endereco /leads/{id}
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/leads/{id}")
     public void remover(@PathVariable Long id) {
         servico.remover(id);
     }

@@ -30,7 +30,10 @@ public class Carteira implements CommandLineRunner {
         // NOVIDADE DO DIA 23: o banco agora sobrevive ao desligar.
         // Sem esta guarda, toda vez que o programa subisse ele inseriria
         // os mesmos 5 leads de novo — 5, 10, 15, 20...
-        // TODO-3: se o banco JA tem lead, nao semear de novo:
+        if (repo.total() > 0) {
+            imprimir();
+            return;
+        }
         //         so chamar imprimir() e sair do metodo com return.
 
         Cliente luna    = new Cliente("Luna Toys", "61993687124");
