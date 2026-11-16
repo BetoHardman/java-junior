@@ -1,0 +1,7 @@
+GET /leads/resumo
+GET /leads?status=contato
+POST /leads {"nome":"Alon Warm","whatsapp":"61900001111"}
+PUT /leads/6 {"status":"contato"}
+DELETE /leads/6
+GET /leads/6
+GET /leads

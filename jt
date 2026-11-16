@@ -110,6 +110,12 @@ rodar_saida(){
     return 0
   fi
 
+  # TESTE COMECA DO ZERO. A partir do dia 23 o banco e um arquivo em
+  # dias/diaNN/dados/. Se ele sobrevivesse entre as rodadas, a 2a corrida
+  # acharia os leads da 1a e a saida mudaria a cada vez. Teste tem que
+  # partir sempre do mesmo estado.
+  rm -rf "$d/dados"
+
   # a saida do programa e a das requisicoes vao para arquivos SEPARADOS.
   # o java mantem seu proprio ponto de escrita no arquivo; se o curl
   # escrevesse no mesmo, um sobrescreveria o outro.
