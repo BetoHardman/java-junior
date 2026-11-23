@@ -44,6 +44,7 @@ O IntelliJ entra depois, quando digitar deixa de ensinar e passa a atrasar.
 | 21 | Camada de serviço: `@Service` e separação de responsabilidades | [dias/dia21](dias/dia21) |
 | 22 | Banco de dados: JPA, `@Entity`, H2 e Spring Data | [dias/dia22](dias/dia22) |
 | 23 | Banco em arquivo, `DELETE` com 204 e carga idempotente | [dias/dia23](dias/dia23) |
+| 24 | Testes automatizados: `@SpringBootTest`, JUnit e `mvn test` | [dias/dia24](dias/dia24) |
 
 Cada pasta tem o enunciado (`EXERCICIO.md`), o código e a saída esperada
 (`esperado.txt`) usada como teste.

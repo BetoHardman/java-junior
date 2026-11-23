@@ -213,6 +213,41 @@ JAVA
     ;;
 
   test|t|teste|testar)
+    # DIA DE TESTE: se a pasta tem src/test/java, quem manda e o mvn test.
+    # Nao sobe servidor, nao compara saida de tela — compara o placar do JUnit.
+    d_pre=$(alvo "${2:-}")
+    if [ -d "$d_pre/src/test/java" ]; then
+      MVN="mvn"
+      command -v mvn >/dev/null 2>&1 || for m in "/c/Program Files/JetBrains"/*/plugins/maven/lib/maven3/bin/mvn                                                 "$HOME/AppData/Local/JetBrains"/*/plugins/maven/lib/maven3/bin/mvn; do
+        [ -x "$m" ] && MVN="$m" && break
+      done
+      amarelo "dia de teste: rodando mvn test..."
+      ( cd "$d_pre" && "$MVN" test ) > /tmp/jt_mvn 2>&1
+      cod=$?
+      # o placar do JUnit e a unica linha que interessa, e ela e estavel
+      grep -oE 'Tests run: [0-9]+, Failures: [0-9]+, Errors: [0-9]+, Skipped: [0-9]+' /tmp/jt_mvn         | tail -1 > /tmp/jt_a
+      if [ ! -s /tmp/jt_a ]; then
+        vermelho "FALHOU  $(basename "$d_pre") — nem chegou a rodar teste"
+        tail -40 /tmp/jt_mvn
+        exit 1
+      fi
+      tr -d '
+' < "$d_pre/esperado.txt" | sed -e 's/[[:space:]]*$//' > /tmp/jt_b
+      sed -i -e 's/[[:space:]]*$//' /tmp/jt_a
+      # compara como texto: imune a quebra de linha final sobrando ou faltando
+      if [ "$cod" = "0" ] && [ "$(cat /tmp/jt_a)" = "$(cat /tmp/jt_b)" ]; then
+        verde "PASSOU  $(basename "$d_pre")"
+        cat /tmp/jt_a
+        exit 0
+      fi
+      vermelho "FALHOU  $(basename "$d_pre")"
+      echo "--- esperado ---"; cat /tmp/jt_b
+      echo "--- recebido ---"; cat /tmp/jt_a
+      echo "--- o que o mvn disse ---"
+      grep -E '^\[ERROR\]|expected:|but was:|Tests run:' /tmp/jt_mvn | head -20
+      exit 1
+    fi
+
     d=$(alvo "${2:-}")
     esperado="$d/esperado.txt"
     [ -f "$esperado" ] || { amarelo "sem esperado.txt em $(basename "$d") — nada a conferir"; exit 0; }
